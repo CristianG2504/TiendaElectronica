@@ -20,11 +20,10 @@ public class Proveedor {
     public Proveedor() {
     }
 
-    public Proveedor(int id, String nombre, String contacto,
+    public Proveedor(int id, String nombre,
             String direccion, String telefono, String correo) {
         this.id = id;
         this.nombre = nombre;
-        this.contacto = contacto;
         this.direccion = direccion;
         this.telefono = telefono;
         this.correo = correo;

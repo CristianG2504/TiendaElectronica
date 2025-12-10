@@ -48,7 +48,6 @@ public class ProveedorDaoImpl implements ProveedorDao {
                 Proveedor p = new Proveedor(
                         rs.getInt("id"),
                         rs.getString("nombre"),
-                        rs.getString("contacto"),
                         rs.getString("direccion"),
                         rs.getString("telefono"),
                         rs.getString("correo")
@@ -64,14 +63,12 @@ public class ProveedorDaoImpl implements ProveedorDao {
         List<Proveedor> lista = new ArrayList<>();
         String sql = "SELECT * FROM proveedor ORDER BY nombre ASC";
 
-        try (Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+        try (Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
                 lista.add(new Proveedor(
                         rs.getInt("id"),
                         rs.getString("nombre"),
-                        rs.getString("contacto"),
                         rs.getString("direccion"),
                         rs.getString("telefono"),
                         rs.getString("correo")
@@ -105,33 +102,43 @@ public class ProveedorDaoImpl implements ProveedorDao {
     }
 
     @Override
-    public List<Proveedor> buscar(String filtro, Object valor) throws SQLException {
+    public List<Proveedor> buscar(String valor) throws SQLException {
         List<Proveedor> lista = new ArrayList<>();
-        String sql = "SELECT * FROM proveedor WHERE " + filtro + " LIKE ?";
+
+        String sql = "SELECT * FROM proveedor WHERE "
+                + "nombre LIKE ? OR "
+                + "direccion LIKE ? OR "
+                + "telefono LIKE ? OR "
+                + "correo LIKE ?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, "%" + valor + "%");
+
+            String v = "%" + valor + "%";
+            ps.setString(1, v);
+            ps.setString(2, v);
+            ps.setString(3, v);
+            ps.setString(4, v);
+
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 lista.add(new Proveedor(
                         rs.getInt("id"),
                         rs.getString("nombre"),
-                        rs.getString("contacto"),
                         rs.getString("direccion"),
                         rs.getString("telefono"),
                         rs.getString("correo")
                 ));
             }
         }
+
         return lista;
     }
 
     @Override
     public int contarProveedores() throws SQLException {
         String sql = "SELECT COUNT(*) FROM proveedor";
-        try (Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+        try (Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             return rs.next() ? rs.getInt(1) : 0;
         }
     }

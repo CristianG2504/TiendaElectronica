@@ -16,7 +16,7 @@ import java.sql.DriverManager;
 public class DBConnection {
       private static DBConnection instance;
     private Connection connection;
-    private final String url = "jdbc:mariadb://localhost:3306/tienda_electronica";
+    private final String url = "jdbc:mysql://localhost:3306/tienda_electronica";
     private final String user = "root";
     private final String password = "";
 

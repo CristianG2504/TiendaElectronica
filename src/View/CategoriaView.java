@@ -4,11 +4,9 @@
  */
 package View;
 
-import Controller.ProveedorController;
+
 import Model.Proveedor;
-import dao.impl.ProveedorDaoImpl;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -17,12 +15,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author joans
  */
-public class ProveedorView extends javax.swing.JPanel {
+public class CategoriaView extends javax.swing.JPanel {
 
     /**
      * Creates new form ProductoView
      */
-    public ProveedorView() throws SQLException {
+    public CategoriaView() throws SQLException {
 
         initComponents();
 
@@ -355,7 +353,7 @@ public class ProveedorView extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JScrollPane jScrollPane1;
+    public javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JTextField txtBuscar;
     public javax.swing.JTextField txtCorreo;
     public javax.swing.JTextField txtDireccion;

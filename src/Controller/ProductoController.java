@@ -115,10 +115,10 @@ public class ProductoController {
         Producto p = new Producto(
                 vista.txtCodigo.getText(),
                 vista.txtNombre.getText(),
-                categoria.getId(),         // Guarda ID de categoría
+                categoria.getId(),        
                 Double.parseDouble(vista.txtPrecio.getText()),
                 Integer.parseInt(vista.txtCantidad.getText()),
-                proveedor.getId()          // Guarda ID del proveedor
+                proveedor.getId()         
         );
 
         try {

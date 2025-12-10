@@ -26,7 +26,7 @@ public interface ProveedorDao {
 
     List<Proveedor> listarTodos() throws Exception;
 
-    List<Proveedor> buscar(String filtro, Object valor) throws Exception;
+    List<Proveedor> buscar(String filtro) throws Exception;
 
     int contarProveedores() throws Exception;
 }

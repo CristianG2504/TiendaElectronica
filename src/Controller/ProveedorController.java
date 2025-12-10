@@ -5,10 +5,9 @@
 package Controller;
 
 import Model.Proveedor;
+import View.ProveedorView;
 import dao.ProveedorDao;
-import view.ProveedorView;
 import java.util.List;
-import java.util.Optional;
 import javax.swing.JOptionPane;
 
 /**
@@ -27,11 +26,11 @@ public class ProveedorController {
     }
 
     private void iniciarControl() {
-        vista.btnGuardar.addActionListener(e -> guardarProveedor());
         vista.btnActualizar.addActionListener(e -> actualizarProveedor());
         vista.btnEliminar.addActionListener(e -> eliminarProveedor());
-        vista.btnBuscar.addActionListener(e -> buscarProveedor());
+        vista.BtnBuscar.addActionListener(e -> buscarProveedor());
         vista.btnLimpiar.addActionListener(e -> limpiarFormulario());
+        vista.btnAgregar.addActionListener(e -> guardarProveedor());
 
         cargarTabla();
     }
@@ -56,9 +55,8 @@ public class ProveedorController {
         }
 
         Proveedor p = new Proveedor(
-                0, // autoincrement
+                0, 
                 vista.txtNombre.getText(),
-                vista.txtContacto.getText(),
                 vista.txtDireccion.getText(),
                 vista.txtTelefono.getText(),
                 vista.txtCorreo.getText()
@@ -76,16 +74,15 @@ public class ProveedorController {
     }
 
     private void actualizarProveedor() {
-        if (!validarFormulario()) {
+        if (!validarFormulario()&& vista.txtID.getText().isEmpty()) {
             return;
         }
 
-        int id = Integer.parseInt(vista.txtId.getText());
+        int id = Integer.parseInt(vista.txtID.getText());
 
         Proveedor p = new Proveedor(
                 id,
                 vista.txtNombre.getText(),
-                vista.txtContacto.getText(),
                 vista.txtDireccion.getText(),
                 vista.txtTelefono.getText(),
                 vista.txtCorreo.getText()
@@ -95,6 +92,7 @@ public class ProveedorController {
             if (proveedorDAO.actualizar(p)) {
                 JOptionPane.showMessageDialog(vista, "Proveedor actualizado");
                 cargarTabla();
+                limpiarFormulario();
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(vista, "Error al actualizar: " + ex.getMessage());
@@ -102,12 +100,12 @@ public class ProveedorController {
     }
 
     private void eliminarProveedor() {
-        if (vista.txtId.getText().isEmpty()) {
+        if (vista.txtID.getText().isEmpty()) {
             JOptionPane.showMessageDialog(vista, "Debe seleccionar un proveedor");
             return;
         }
 
-        int id = Integer.parseInt(vista.txtId.getText());
+        int id = Integer.parseInt(vista.txtID.getText());
 
         try {
             if (proveedorDAO.eliminar(id)) {
@@ -124,11 +122,11 @@ public class ProveedorController {
     // BÚSQUEDAS
     // -------------------------------------------------------
     private void buscarProveedor() {
-        String campo = vista.cmbFiltro.getSelectedItem().toString();
+
         String valor = vista.txtBuscar.getText();
 
         try {
-            List<Proveedor> lista = proveedorDAO.buscar(campo, valor);
+            List<Proveedor> lista = proveedorDAO.buscar(valor);
             vista.cargarTabla(lista);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(vista, "Error al buscar: " + ex.getMessage());
@@ -148,9 +146,8 @@ public class ProveedorController {
     }
 
     private void limpiarFormulario() {
-        vista.txtId.setText("");
+        vista.txtID.setText("");
         vista.txtNombre.setText("");
-        vista.txtContacto.setText("");
         vista.txtDireccion.setText("");
         vista.txtTelefono.setText("");
         vista.txtCorreo.setText("");
