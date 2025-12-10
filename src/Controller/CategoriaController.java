@@ -4,7 +4,6 @@
  */
 package Controller;
 
-
 import Model.Categoria;
 import dao.impl.CategoriaDaoImpl;
 import View.CategoriaView;
@@ -18,29 +17,24 @@ import java.util.List;
  * @author joans
  */
 public class CategoriaController {
-      private final CategoriaView view;
+
+    private final CategoriaView view;
     private final CategoriaDaoImpl dao;
 
     public CategoriaController(CategoriaView view, CategoriaDaoImpl dao) {
         this.view = view;
         this.dao = dao;
 
-        // Inicializar tabla al cargar
         cargarTabla();
 
-        // Botón agregar
         view.btnAgregar.addActionListener(e -> agregarCategoria());
 
-        // Botón actualizar
         view.btnActualizar.addActionListener(e -> actualizarCategoria());
 
-        // Botón eliminar
         view.btnEliminar.addActionListener(e -> eliminarCategoria());
 
-        // Botón limpiar
         view.btnLimpiar.addActionListener(e -> limpiarCampos());
 
-        // Click en la tabla
         view.TbTabla.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
