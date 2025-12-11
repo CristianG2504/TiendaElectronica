@@ -4,18 +4,15 @@
  */
 package View;
 
-import Controller.ProveedorController;
-import Model.Proveedor;
-import dao.impl.ProveedorDaoImpl;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import Model.Cliente;
+
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author joans
+ * @author Cami
  */
 public class ClienteView extends javax.swing.JPanel {
 
@@ -35,18 +32,18 @@ public class ClienteView extends javax.swing.JPanel {
 
     }
 
-    public void cargarTabla(List<Proveedor> lista) {
+    public void cargarTabla(List<Cliente> lista) {
         DefaultTableModel modelo = (DefaultTableModel) TbTabla.getModel();
 
         modelo.setRowCount(0);
 
-        for (Proveedor p : lista) {
+        for (Cliente c : lista) {
             modelo.addRow(new Object[]{
-                p.getId(),
-                p.getNombre(),
-                p.getDireccion(),
-                p.getTelefono(),
-                p.getCorreo()
+                c.getCedula(),
+                c.getNombre(),
+                c.getDireccion(),
+                c.getTelefono(),
+                c.getCorreo()
             });
         }
 
@@ -55,9 +52,9 @@ public class ClienteView extends javax.swing.JPanel {
 
     private void llenarCamposDesdeTabla() {
         int fila = TbTabla.getSelectedRow();
-        if (fila >= 0) { 
+        if (fila >= 0) {
 
-            txtID.setText(TbTabla.getValueAt(fila, 0).toString());
+            txtCedula.setText(TbTabla.getValueAt(fila, 0).toString());
             txtNombre.setText(TbTabla.getValueAt(fila, 1).toString());
             txtDireccion.setText(TbTabla.getValueAt(fila, 2).toString());
             txtTelefono.setText(TbTabla.getValueAt(fila, 3).toString());
@@ -89,7 +86,7 @@ public class ClienteView extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        txtID = new javax.swing.JTextField();
+        txtCedula = new javax.swing.JTextField();
         txtNombre = new javax.swing.JTextField();
         txtTelefono = new javax.swing.JTextField();
         txtDireccion = new javax.swing.JTextField();
@@ -109,7 +106,7 @@ public class ClienteView extends javax.swing.JPanel {
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        jLabel1.setText("PROVEEDORES");
+        jLabel1.setText("CLIENTES");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -131,7 +128,7 @@ public class ClienteView extends javax.swing.JPanel {
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel4.setForeground(new java.awt.Color(153, 153, 153));
 
-        jLabel2.setText("BUSCAR PROVEEDOR");
+        jLabel2.setText("BUSCAR ClIENTE");
 
         BtnBuscar.setText("Buscar");
 
@@ -165,7 +162,7 @@ public class ClienteView extends javax.swing.JPanel {
 
         jLabel3.setText("PANEL DATOS");
 
-        jLabel4.setText("ID");
+        jLabel4.setText("CEDULA");
 
         jLabel5.setText("NOMBRE");
 
@@ -175,7 +172,7 @@ public class ClienteView extends javax.swing.JPanel {
 
         jLabel8.setText("CORREO");
 
-        txtID.setEditable(false);
+        txtCedula.setEditable(false);
 
         btnAgregar.setText("NUEVO");
 
@@ -204,7 +201,7 @@ public class ClienteView extends javax.swing.JPanel {
                             .addComponent(txtDireccion, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtTelefono, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
-                            .addComponent(txtID, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCedula, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtCorreo)))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(107, 107, 107)
@@ -229,7 +226,7 @@ public class ClienteView extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
@@ -357,9 +354,9 @@ public class ClienteView extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JTextField txtBuscar;
+    public javax.swing.JTextField txtCedula;
     public javax.swing.JTextField txtCorreo;
     public javax.swing.JTextField txtDireccion;
-    public javax.swing.JTextField txtID;
     public javax.swing.JTextField txtNombre;
     public javax.swing.JTextField txtTelefono;
     // End of variables declaration//GEN-END:variables

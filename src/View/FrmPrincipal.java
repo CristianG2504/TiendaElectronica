@@ -5,25 +5,28 @@
 package View;
 
 import Controller.CategoriaController;
+import Controller.ClienteController;
 import Controller.ProductoController;
 import Controller.UsuarioController;
 import Controller.VentaController;
 import dao.ClienteDao;
 import dao.ProductoDao;
 import dao.UsuarioDao;
+import dao.VentaCompletaDao;
 import dao.VentaDetalleDao;
 import dao.impl.CategoriaDaoImpl;
 import dao.impl.ClienteDaoImpl;
 import dao.impl.ProductoDAOImpl;
 import dao.impl.ProveedorDaoImpl;
 import dao.impl.UsuarioDaoImpl;
+import dao.impl.VentaCompletaDaoImpl;
 import dao.impl.VentaDaoImpl;
 import dao.impl.VentaDetalleDaoImpl;
 import java.sql.SQLException;
 
 /**
  *
- * @author joans
+ * @author Paulo
  */
 public class FrmPrincipal extends javax.swing.JFrame {
 
@@ -54,6 +57,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         btnProveedores = new javax.swing.JLabel();
         btnProveedores1 = new javax.swing.JLabel();
+        btnClientes = new javax.swing.JLabel();
+        btnClientes1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -78,6 +83,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(0, 0, 0));
         jPanel3.setLayout(new java.awt.GridLayout(0, 1));
 
+        jLabel1.setBackground(new java.awt.Color(255, 102, 102));
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -148,6 +154,29 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         });
         jPanel3.add(btnProveedores1);
+
+        btnClientes.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnClientes.setForeground(new java.awt.Color(255, 255, 255));
+        btnClientes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnClientes.setText("CLIENTES");
+        btnClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnClientesMouseClicked(evt);
+            }
+        });
+        jPanel3.add(btnClientes);
+
+        btnClientes1.setBackground(new java.awt.Color(255, 0, 102));
+        btnClientes1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnClientes1.setForeground(new java.awt.Color(255, 51, 51));
+        btnClientes1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnClientes1.setText("CERRAR SESIÓN");
+        btnClientes1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnClientes1MouseClicked(evt);
+            }
+        });
+        jPanel3.add(btnClientes1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -236,6 +265,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jLabel5MouseClicked
 
+    private void btnClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnClientesMouseClicked
+        try {
+            this.abrirClientes();
+        } catch (SQLException ex) {
+            System.getLogger(FrmPrincipal.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }//GEN-LAST:event_btnClientesMouseClicked
+
+    private void btnClientes1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnClientes1MouseClicked
+      Login l = new Login();
+      l.setVisible(true);
+      this.dispose();
+    }//GEN-LAST:event_btnClientes1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -262,6 +305,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel btnClientes;
+    private javax.swing.JLabel btnClientes1;
     private javax.swing.JLabel btnProveedores;
     private javax.swing.JLabel btnProveedores1;
     private javax.swing.JLabel jLabel1;
@@ -348,7 +393,24 @@ private void abrirProveedores() throws SQLException {
         VentaView vistaCategoria = new VentaView();
         VentaDaoImpl dao = new VentaDaoImpl();
 
-        VentaController controller = new VentaController(vistaCategoria, dao, new VentaDetalleDaoImpl(), new ClienteDaoImpl(), new ProductoDAOImpl());
+        VentaController controller = new VentaController(vistaCategoria, dao, new VentaDetalleDaoImpl(), new ClienteDaoImpl(), new ProductoDAOImpl(), new VentaCompletaDaoImpl());
+
+        jPanel2.add(vistaCategoria, java.awt.BorderLayout.CENTER);
+        jPanel2.revalidate();
+        jPanel2.repaint();
+    }
+      
+      
+       private void abrirClientes() throws SQLException {
+        jPanel2.removeAll();
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+
+        
+        ClienteView vistaCategoria = new ClienteView();
+        ClienteDaoImpl dao = new ClienteDaoImpl();
+
+        ClienteController controller = new ClienteController(vistaCategoria, dao);
 
         jPanel2.add(vistaCategoria, java.awt.BorderLayout.CENTER);
         jPanel2.revalidate();

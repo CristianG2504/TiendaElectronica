@@ -7,17 +7,17 @@ package Controller;
 import Model.Cliente;
 import Model.Producto;
 import Model.Venta;
+import Model.VentaCompletaDTO;
 import Model.VentaDetalle;
 import View.VentaView;
 import dao.ClienteDao;
 import dao.ProductoDao;
+import dao.VentaCompletaDao;
 import dao.VentaDao;
 import dao.VentaDetalleDao;
 
 import java.util.List;
 import javax.swing.JOptionPane;
-
-
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -43,19 +43,21 @@ public class VentaController {
     private final VentaDetalleDao detalleDao;
     private final ClienteDao clienteDao;
     private final ProductoDao productoDao;
+    private final VentaCompletaDao ventaCompletaDao;
 
     public VentaController(
             VentaView vista,
             VentaDao ventaDao,
             VentaDetalleDao detalleDao,
             ClienteDao clienteDao,
-            ProductoDao productoDao) {
+            ProductoDao productoDao, VentaCompletaDao ventaCompletaDao) {
 
         this.vista = vista;
         this.ventaDao = ventaDao;
         this.detalleDao = detalleDao;
         this.clienteDao = clienteDao;
         this.productoDao = productoDao;
+        this.ventaCompletaDao = ventaCompletaDao;
 
         iniciarControl();
     }
@@ -67,8 +69,9 @@ public class VentaController {
         vista.cmbProducto.addActionListener(e -> actualizarPrecioExistencias());
 
         vista.btnAgregar.addActionListener(e -> agregarProducto());
+
         vista.btnGuardar.addActionListener(e -> guardarVenta());
-       
+        vista.btnVentas.addActionListener(e -> cargarVentas());
 
     }
 
@@ -82,6 +85,15 @@ public class VentaController {
             for (Cliente c : clientes) {
                 vista.cmbCliente.addItem(c);
             }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(vista, "Error cargando clientes: " + ex.getMessage());
+        }
+    }
+
+    private void cargarVentas() {
+        try {
+            List<VentaCompletaDTO> ventas = ventaCompletaDao.listarVentas();
+          vista.cargarTablaVentas(ventas);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(vista, "Error cargando clientes: " + ex.getMessage());
         }
@@ -237,106 +249,102 @@ public class VentaController {
 
             JOptionPane.showMessageDialog(vista,
                     "Venta registrada correctamente. ID: " + idVenta);
-            
-              int opcion = JOptionPane.showConfirmDialog(vista,
-                "¿Desea generar el XML de la venta?",
-                "Generar XML",
-                JOptionPane.YES_NO_OPTION);
 
-        if (opcion == JOptionPane.YES_OPTION) {
-            generarXML(); 
-        }
+            int opcion = JOptionPane.showConfirmDialog(vista,
+                    "¿Desea generar el XML de la venta?",
+                    "Generar XML",
+                    JOptionPane.YES_NO_OPTION);
+
+            if (opcion == JOptionPane.YES_OPTION) {
+                generarXML();
+            }
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(vista, "Error al guardar venta: " + ex.getMessage());
         }
     }
-    
-    
+
     private void generarXML() {
-    try {
-        Cliente cliente = (Cliente) vista.cmbCliente.getSelectedItem();
-        if (cliente == null) {
-            JOptionPane.showMessageDialog(vista, "Seleccione un cliente antes de generar XML");
-            return;
-        }
-
-        DefaultTableModel modelo = (DefaultTableModel) vista.TbTabla.getModel();
-        if (modelo.getRowCount() == 0) {
-            JOptionPane.showMessageDialog(vista, "No hay productos en la venta para generar XML");
-            return;
-        }
-
-       
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.newDocument();
-
-       
-        Element ventaRoot = doc.createElement("venta");
-        doc.appendChild(ventaRoot);
-
-        
-        Element clienteNode = doc.createElement("cliente");
-        clienteNode.setAttribute("id", String.valueOf(cliente.getCedula()));
-        clienteNode.setAttribute("nombre", cliente.getNombre());
-        ventaRoot.appendChild(clienteNode);
-
-        // Productos
-        Element productosNode = doc.createElement("productos");
-        ventaRoot.appendChild(productosNode);
-
-        for (int i = 0; i < modelo.getRowCount(); i++) {
-            Object codigo = modelo.getValueAt(i, 0);
-            Object nombre = modelo.getValueAt(i, 1);
-            Object cantidad = modelo.getValueAt(i, 2);
-            Object precio = modelo.getValueAt(i, 3);
-            Object subtotal = modelo.getValueAt(i, 4);
-
-            Element productoNode = doc.createElement("producto");
-            productoNode.setAttribute("codigo", codigo != null ? codigo.toString() : "");
-            productoNode.setAttribute("nombre", nombre != null ? nombre.toString() : "");
-            productoNode.setAttribute("cantidad", cantidad != null ? cantidad.toString() : "0");
-            productoNode.setAttribute("precio", precio != null ? precio.toString() : "0.0");
-            productoNode.setAttribute("subtotal", subtotal != null ? subtotal.toString() : "0.0");
-
-            productosNode.appendChild(productoNode);
-        }
-
-        // Totales
-        Element totalesNode = doc.createElement("totales");
-        totalesNode.setAttribute("subtotal", vista.txtSubtotal.getText());
-        totalesNode.setAttribute("impuesto", vista.txtImpuesto.getText());
-        totalesNode.setAttribute("total", vista.txtTotal.getText());
-        ventaRoot.appendChild(totalesNode);
-
-        // Elegir ubicación del archivo con JFileChooser
-        JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Guardar XML de la venta");
-        chooser.setFileFilter(new FileNameExtensionFilter("Archivos XML", "xml"));
-        int userSelection = chooser.showSaveDialog(vista);
-
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            String ruta = chooser.getSelectedFile().getAbsolutePath();
-            if (!ruta.toLowerCase().endsWith(".xml")) {
-                ruta += ".xml"; // asegurarse de que tenga extensión .xml
+        try {
+            Cliente cliente = (Cliente) vista.cmbCliente.getSelectedItem();
+            if (cliente == null) {
+                JOptionPane.showMessageDialog(vista, "Seleccione un cliente antes de generar XML");
+                return;
             }
 
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(ruta);
+            DefaultTableModel modelo = (DefaultTableModel) vista.TbTabla.getModel();
+            if (modelo.getRowCount() == 0) {
+                JOptionPane.showMessageDialog(vista, "No hay productos en la venta para generar XML");
+                return;
+            }
 
-            transformer.transform(source, result);
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.newDocument();
 
-            JOptionPane.showMessageDialog(vista, "XML generado correctamente en: " + ruta);
+            Element ventaRoot = doc.createElement("venta");
+            doc.appendChild(ventaRoot);
+
+            Element clienteNode = doc.createElement("cliente");
+            clienteNode.setAttribute("id", String.valueOf(cliente.getCedula()));
+            clienteNode.setAttribute("nombre", cliente.getNombre());
+            ventaRoot.appendChild(clienteNode);
+
+            // Productos
+            Element productosNode = doc.createElement("productos");
+            ventaRoot.appendChild(productosNode);
+
+            for (int i = 0; i < modelo.getRowCount(); i++) {
+                Object codigo = modelo.getValueAt(i, 0);
+                Object nombre = modelo.getValueAt(i, 1);
+                Object cantidad = modelo.getValueAt(i, 2);
+                Object precio = modelo.getValueAt(i, 3);
+                Object subtotal = modelo.getValueAt(i, 4);
+
+                Element productoNode = doc.createElement("producto");
+                productoNode.setAttribute("codigo", codigo != null ? codigo.toString() : "");
+                productoNode.setAttribute("nombre", nombre != null ? nombre.toString() : "");
+                productoNode.setAttribute("cantidad", cantidad != null ? cantidad.toString() : "0");
+                productoNode.setAttribute("precio", precio != null ? precio.toString() : "0.0");
+                productoNode.setAttribute("subtotal", subtotal != null ? subtotal.toString() : "0.0");
+
+                productosNode.appendChild(productoNode);
+            }
+
+            // Totales
+            Element totalesNode = doc.createElement("totales");
+            totalesNode.setAttribute("subtotal", vista.txtSubtotal.getText());
+            totalesNode.setAttribute("impuesto", vista.txtImpuesto.getText());
+            totalesNode.setAttribute("total", vista.txtTotal.getText());
+            ventaRoot.appendChild(totalesNode);
+
+            // Elegir ubicación del archivo con JFileChooser
+            JFileChooser chooser = new JFileChooser();
+            chooser.setDialogTitle("Guardar XML de la venta");
+            chooser.setFileFilter(new FileNameExtensionFilter("Archivos XML", "xml"));
+            int userSelection = chooser.showSaveDialog(vista);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                String ruta = chooser.getSelectedFile().getAbsolutePath();
+                if (!ruta.toLowerCase().endsWith(".xml")) {
+                    ruta += ".xml";
+                }
+
+                TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                Transformer transformer = transformerFactory.newTransformer();
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                DOMSource source = new DOMSource(doc);
+                StreamResult result = new StreamResult(ruta);
+
+                transformer.transform(source, result);
+
+                JOptionPane.showMessageDialog(vista, "XML generado correctamente en: " + ruta);
+            }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(vista, "Error al generar XML: " + ex.getMessage());
+            ex.printStackTrace();
         }
-
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(vista, "Error al generar XML: " + ex.getMessage());
-        ex.printStackTrace();
     }
-}
 
 }

@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author joans
+ * @author Paulo
  */
 public class ClienteController {
 
@@ -30,7 +30,7 @@ public class ClienteController {
         vista.btnActualizar.addActionListener(e -> actualizarCliente());
         vista.btnEliminar.addActionListener(e -> eliminarCliente());
         vista.btnLimpiar.addActionListener(e -> limpiarFormulario());
-        vista.btnBuscar.addActionListener(e -> buscarCliente());
+        vista.BtnBuscar.addActionListener(e -> buscarCliente());
 
         cargarTabla();
     }

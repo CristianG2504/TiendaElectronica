@@ -8,6 +8,7 @@ import Model.Categoria;
 import Model.Cliente;
 import Model.Producto;
 import Model.Proveedor;
+import Model.VentaCompletaDTO;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JFormattedTextField;
@@ -17,7 +18,7 @@ import javax.swing.text.DefaultFormatterFactory;
 
 /**
  *
- * @author joans
+ * @author Pau
  */
 public class VentaView extends javax.swing.JPanel {
 
@@ -26,16 +27,42 @@ public class VentaView extends javax.swing.JPanel {
      */
     public VentaView() {
         initComponents();
-        
-         TbTabla.addMouseListener(new java.awt.event.MouseAdapter() {
+
+        TbTabla.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 llenarCamposDesdeTabla();
             }
         });
-         
-      
+
+       
+
     }
+
+   public void cargarTablaVentas(List<VentaCompletaDTO> ventas) {
+    DefaultTableModel modelo = new DefaultTableModel();
+    modelo.setColumnIdentifiers(new String[]{
+        "ID Venta", "Fecha", "Cédula Cliente", "Nombre Cliente",
+        "Código Producto", "Nombre Producto", "Cantidad", "Precio Unitario", "Subtotal"
+    });
+
+    for (VentaCompletaDTO v : ventas) {
+        modelo.addRow(new Object[]{
+            v.getIdVenta(),
+            v.getFecha(),
+            v.getCedulaCliente(),
+            v.getNombreCliente(),
+            v.getCodigoProducto(),
+            v.getNombreProducto(),
+            v.getCantidad(),
+            v.getPrecioUnitario(),
+            v.getSubtotal()
+        });
+    }
+
+    tablaVentas.setModel(modelo);
+}
+
 
     public void cargarTabla(List<Producto> lista) {
         DefaultTableModel modelo = (DefaultTableModel) TbTabla.getModel();
@@ -56,7 +83,7 @@ public class VentaView extends javax.swing.JPanel {
     }
 
     private void llenarCamposDesdeTabla() {
-      
+
     }
 
     /**
@@ -102,7 +129,7 @@ public class VentaView extends javax.swing.JPanel {
         txtTotal = new javax.swing.JTextField();
         btnGuardar = new javax.swing.JButton();
         txtImpuesto = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnVentas = new javax.swing.JButton();
 
         jDialog1.setMaximumSize(new java.awt.Dimension(822, 514));
         jDialog1.setMinimumSize(new java.awt.Dimension(822, 514));
@@ -129,9 +156,9 @@ public class VentaView extends javax.swing.JPanel {
                         .addGap(361, 361, 361)
                         .addComponent(jLabel5))
                     .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(170, 170, 170)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(200, Short.MAX_VALUE))
+                        .addGap(33, 33, 33)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 766, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -316,7 +343,12 @@ public class VentaView extends javax.swing.JPanel {
         txtImpuesto.setEditable(false);
         txtImpuesto.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
-        jButton1.setText("VER VENTAS");
+        btnVentas.setText("VER VENTAS");
+        btnVentas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVentasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -338,7 +370,7 @@ public class VentaView extends javax.swing.JPanel {
                         .addGap(42, 42, 42)
                         .addComponent(btnGuardar)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1))
+                        .addComponent(btnVentas))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(98, 98, 98)
                         .addComponent(jLabel8)))
@@ -353,7 +385,7 @@ public class VentaView extends javax.swing.JPanel {
                     .addComponent(jLabel9)
                     .addComponent(txtSubtotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGuardar)
-                    .addComponent(jButton1))
+                    .addComponent(btnVentas))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
@@ -437,14 +469,19 @@ public class VentaView extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
+
+        this.jDialog1.setVisible(true);
+    }//GEN-LAST:event_btnVentasActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JTable TbTabla;
     public javax.swing.JButton btnAgregar;
     public javax.swing.JButton btnGuardar;
+    public javax.swing.JButton btnVentas;
     public javax.swing.JComboBox<Cliente> cmbCliente;
     public javax.swing.JComboBox<Producto> cmbProducto;
-    private javax.swing.JButton jButton1;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
