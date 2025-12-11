@@ -18,7 +18,7 @@ public interface UsuarioDao {
 
     boolean actualizar(Usuario u) throws Exception;
 
-    boolean eliminar(int id) throws Exception;
+    boolean eliminar(String id) throws Exception;
 
     Optional<Usuario> obtenerPorId(int id) throws Exception;
 

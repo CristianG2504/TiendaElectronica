@@ -24,7 +24,7 @@ public interface ProductoDao {
 
     List<Producto> listarTodos() throws Exception;
 
-    List<Producto> buscar(String filtro, Object valor) throws Exception;
+    List<Producto> buscar(String filtro) throws Exception;
 
     int contarPorCategoria(int idCategoria) throws Exception;
 }

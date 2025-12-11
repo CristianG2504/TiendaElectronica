@@ -4,11 +4,9 @@
  */
 package Controller;
 
-
 import Model.Usuario;
 import View.UsuarioView;
 import dao.UsuarioDao;
-import view.UsuarioView;
 
 import javax.swing.*;
 import java.util.List;
@@ -32,18 +30,19 @@ public class UsuarioController {
         vista.btnGuardar.addActionListener(e -> guardar());
         vista.btnActualizar.addActionListener(e -> actualizar());
         vista.btnEliminar.addActionListener(e -> eliminar());
-        vista.btnBuscar.addActionListener(e -> buscar());
+
         cargarTabla();
     }
 
     private void guardar() {
         try {
+
+            String contrasena = new String(vista.txtContrasena.getPassword());
+
             Usuario u = new Usuario(
-                    vista.txtUsername.getText(),
-                    vista.txtPassword.getText(), // se encripta en el DAO
-                    vista.txtNombre.getText(),
-                    vista.cmbRol.getSelectedItem().toString(),
-                    vista.chkActivo.isSelected()
+                    vista.txtUsuario.getText(),
+                    contrasena,
+                    vista.cmbRol.getSelectedItem().toString()
             );
 
             if (usuarioDao.crear(u)) {
@@ -59,12 +58,9 @@ public class UsuarioController {
     private void actualizar() {
         try {
             Usuario u = new Usuario(
-                    Integer.parseInt(vista.txtId.getText()),
-                    vista.txtUsername.getText(),
-                    null, // la contraseña NO se actualiza aquí
-                    vista.txtNombre.getText(),
-                    vista.cmbRol.getSelectedItem().toString(),
-                    vista.chkActivo.isSelected()
+                    vista.txtUsuario.getText(),
+                    null,
+                    vista.cmbRol.getSelectedItem().toString()
             );
 
             if (usuarioDao.actualizar(u)) {
@@ -79,22 +75,12 @@ public class UsuarioController {
 
     private void eliminar() {
         try {
-            int id = Integer.parseInt(vista.txtId.getText());
+            String user = (vista.txtUsuario.getText());
 
-            if (usuarioDao.eliminar(id)) {
+            if (usuarioDao.eliminar(user)) {
                 JOptionPane.showMessageDialog(vista, "Usuario eliminado");
                 cargarTabla();
             }
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(vista, "Error: " + ex.getMessage());
-        }
-    }
-
-    private void buscar() {
-        try {
-            List<Usuario> lista = usuarioDao.buscar("nombre", vista.txtBuscar.getText());
-            vista.cargarTabla(lista);
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(vista, "Error: " + ex.getMessage());

@@ -4,10 +4,12 @@
  */
 package dao;
 
+import Model.Venta;
+
 /**
  *
  * @author joans
  */
 public interface VentaDao {
-    
+     int crearVenta(Venta venta) throws Exception;
 }

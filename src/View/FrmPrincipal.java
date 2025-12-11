@@ -6,9 +6,19 @@ package View;
 
 import Controller.CategoriaController;
 import Controller.ProductoController;
+import Controller.UsuarioController;
+import Controller.VentaController;
+import dao.ClienteDao;
+import dao.ProductoDao;
+import dao.UsuarioDao;
+import dao.VentaDetalleDao;
 import dao.impl.CategoriaDaoImpl;
+import dao.impl.ClienteDaoImpl;
 import dao.impl.ProductoDAOImpl;
 import dao.impl.ProveedorDaoImpl;
+import dao.impl.UsuarioDaoImpl;
+import dao.impl.VentaDaoImpl;
+import dao.impl.VentaDetalleDaoImpl;
 import java.sql.SQLException;
 
 /**
@@ -78,6 +88,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("USUARIOS");
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
+        jLabel3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jLabel3KeyPressed(evt);
+            }
+        });
         jPanel3.add(jLabel3);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -89,12 +109,22 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 jLabel4MouseClicked(evt);
             }
         });
+        jLabel4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jLabel4KeyPressed(evt);
+            }
+        });
         jPanel3.add(jLabel4);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("VENTAS");
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel5MouseClicked(evt);
+            }
+        });
         jPanel3.add(jLabel5);
 
         btnProveedores.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -155,11 +185,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnProveedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProveedoresMouseClicked
-        try {
-            this.abrirProveedores();
-        } catch (SQLException ex) {
-            System.getLogger(FrmPrincipal.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        }
+
     }//GEN-LAST:event_btnProveedoresMouseClicked
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
@@ -171,12 +197,44 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void btnProveedores1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProveedores1MouseClicked
-     try {
+        try {
             this.abrirCategorias();
         } catch (SQLException ex) {
             System.getLogger(FrmPrincipal.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
     }//GEN-LAST:event_btnProveedores1MouseClicked
+
+    private void jLabel4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLabel4KeyPressed
+        try {
+            this.abrirProveedores();
+        } catch (SQLException ex) {
+            System.getLogger(FrmPrincipal.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }//GEN-LAST:event_jLabel4KeyPressed
+
+    private void jLabel3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLabel3KeyPressed
+        try {
+            this.abrirUsuarios();
+        } catch (SQLException ex) {
+            System.getLogger(FrmPrincipal.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }//GEN-LAST:event_jLabel3KeyPressed
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+         try {
+            this.abrirUsuarios();
+        } catch (SQLException ex) {
+            System.getLogger(FrmPrincipal.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+         try {
+            this.abrirVentas();
+        } catch (SQLException ex) {
+            System.getLogger(FrmPrincipal.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }//GEN-LAST:event_jLabel5MouseClicked
 
     /**
      * @param args the command line arguments
@@ -218,11 +276,11 @@ private void abrirProveedores() throws SQLException {
         jPanel2.removeAll();
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-        // Crear vista y DAO
+      
         ProveedorView vistaProveedor = new ProveedorView();
         ProveedorDaoImpl dao = new ProveedorDaoImpl();
 
-        // Crear controlador
+   
         Controller.ProveedorController controller
                 = new Controller.ProveedorController(vistaProveedor, dao);
 
@@ -235,31 +293,62 @@ private void abrirProveedores() throws SQLException {
         jPanel2.removeAll();
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-     
         ProductoView vistaProducto = new ProductoView();
         ProductoDAOImpl dao = new ProductoDAOImpl();
+        CategoriaDaoImpl daoCategoria = new CategoriaDaoImpl();
+        ProveedorDaoImpl daoProveedor = new ProveedorDaoImpl();
 
-
+        //public ProductoController(ProductoView vista, ProductoDao productoDAO,
+        //CategoriaDao categoriaDAO, ProveedorDao proveedorDAO) {
         ProductoController controller
-                = new ProductoController(vistaProducto, dao);
+                = new ProductoController(vistaProducto, dao, daoCategoria, daoProveedor);
 
         jPanel2.add(vistaProducto, java.awt.BorderLayout.CENTER);
         jPanel2.revalidate();
         jPanel2.repaint();
     }
-    
-    
-       private void abrirCategorias() throws SQLException {
+
+    private void abrirCategorias() throws SQLException {
         jPanel2.removeAll();
         jPanel2.setLayout(new java.awt.BorderLayout());
 
-     
         CategoriaView vistaCategoria = new CategoriaView();
         CategoriaDaoImpl dao = new CategoriaDaoImpl();
 
-
         CategoriaController controller
                 = new CategoriaController(vistaCategoria, dao);
+
+        jPanel2.add(vistaCategoria, java.awt.BorderLayout.CENTER);
+        jPanel2.revalidate();
+        jPanel2.repaint();
+    }
+
+    private void abrirUsuarios() throws SQLException {
+        jPanel2.removeAll();
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        UsuarioView vistaCategoria = new UsuarioView();
+        UsuarioDaoImpl dao = new UsuarioDaoImpl();
+
+        UsuarioController controller
+                = new UsuarioController(vistaCategoria, dao);
+
+        jPanel2.add(vistaCategoria, java.awt.BorderLayout.CENTER);
+        jPanel2.revalidate();
+        jPanel2.repaint();
+    }
+    
+    
+      private void abrirVentas() throws SQLException {
+        jPanel2.removeAll();
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+
+        
+        VentaView vistaCategoria = new VentaView();
+        VentaDaoImpl dao = new VentaDaoImpl();
+
+        VentaController controller = new VentaController(vistaCategoria, dao, new VentaDetalleDaoImpl(), new ClienteDaoImpl(), new ProductoDAOImpl());
 
         jPanel2.add(vistaCategoria, java.awt.BorderLayout.CENTER);
         jPanel2.revalidate();

@@ -37,7 +37,16 @@ public class Usuario {
         this.activo = activo;
     }
 
-    // Getters y Setters
+    public Usuario(String username, String passwordHash, String rol) {
+        this.username = username;
+        this.passwordHash = passwordHash;
+        this.rol = rol;
+    }
+    
+    
+    
+
+
     public int getId() {
         return id;
     }

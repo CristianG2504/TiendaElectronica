@@ -5,10 +5,13 @@
 package Controller;
 
 
+import Model.Categoria;
 import Model.Producto;
+import Model.Proveedor;
 import View.ProductoView;
+import dao.CategoriaDao;
 import dao.ProductoDao;
-import view.ProductoView;
+import dao.ProveedorDao;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -16,9 +19,10 @@ import javax.swing.JOptionPane;
  *
  * @author joans
  */
+
 public class ProductoController {
-    
-   private ProductoView vista;
+
+    private ProductoView vista;
     private ProductoDao productoDAO;
     private CategoriaDao categoriaDAO;
     private ProveedorDao proveedorDAO;
@@ -37,30 +41,25 @@ public class ProductoController {
     }
 
     private void iniciarControl() {
-        vista.btnGuardar.addActionListener(e -> guardarProducto());
+        vista.btnAgregar.addActionListener(e -> guardarProducto());
         vista.btnActualizar.addActionListener(e -> actualizarProducto());
         vista.btnEliminar.addActionListener(e -> eliminarProducto());
         vista.btnBuscar.addActionListener(e -> buscarProducto());
         vista.btnLimpiar.addActionListener(e -> limpiarFormulario());
     }
 
-    // ===============================================================
-    //              CARGAR COMBOS DESDE LA BASE DE DATOS
-    // ===============================================================
     private void cargarCombos() {
         try {
-            // ---- Categorías ----
             vista.cmbCategoria.removeAllItems();
-            List<Categoria> categorias = categoriaDAO.listarCategorias();
+            List<Categoria> categorias = categoriaDAO.listarTodos();
             for (Categoria c : categorias) {
-                vista.cmbCategoria.addItem(c);
+                vista.cmbCategoria.addItem(c);  
             }
 
-            // ---- Proveedores ----
             vista.cmbProveedor.removeAllItems();
-            List<Proveedor> proveedores = proveedorDAO.listarProveedores();
+            List<Proveedor> proveedores = proveedorDAO.listarTodos();
             for (Proveedor p : proveedores) {
-                vista.cmbProveedor.addItem(p);
+                vista.cmbProveedor.addItem(p);  
             }
 
         } catch (Exception e) {
@@ -68,9 +67,6 @@ public class ProductoController {
         }
     }
 
-    // ===============================================================
-    //                    VALIDACIONES
-    // ===============================================================
     private boolean validarFormulario() {
 
         if (vista.txtCodigo.getText().trim().isEmpty()
@@ -84,7 +80,6 @@ public class ProductoController {
                     "Todos los datos son obligatorios",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
-
             return false;
         }
 
@@ -102,10 +97,6 @@ public class ProductoController {
         return true;
     }
 
-    // ===============================================================
-    //                          CRUD
-    // ===============================================================
-
     private void guardarProducto() {
         if (!validarFormulario()) return;
 
@@ -115,14 +106,14 @@ public class ProductoController {
         Producto p = new Producto(
                 vista.txtCodigo.getText(),
                 vista.txtNombre.getText(),
-                categoria.getId(),        
+                categoria,
                 Double.parseDouble(vista.txtPrecio.getText()),
                 Integer.parseInt(vista.txtCantidad.getText()),
-                proveedor.getId()         
+                proveedor
         );
 
         try {
-            if (productoDAO.insertar(p)) {
+            if (productoDAO.crear(p)) {
                 JOptionPane.showMessageDialog(vista, "Producto registrado correctamente");
                 cargarTablaProductos();
                 limpiarFormulario();
@@ -141,10 +132,10 @@ public class ProductoController {
         Producto p = new Producto(
                 vista.txtCodigo.getText(),
                 vista.txtNombre.getText(),
-                categoria.getId(),
+                categoria,
                 Double.parseDouble(vista.txtPrecio.getText()),
                 Integer.parseInt(vista.txtCantidad.getText()),
-                proveedor.getId()
+                proveedor
         );
 
         try {
@@ -176,40 +167,29 @@ public class ProductoController {
         }
     }
 
-    // ===============================================================
-    //                     BUSCAR PRODUCTOS
-    // ===============================================================
-
     private void buscarProducto() {
-        String filtro = vista.txtBuscar.getText();
+        String texto = vista.txtBuscar.getText();
+
+        if (texto.isEmpty()) {
+            cargarTablaProductos();
+            return;
+        }
 
         try {
-            List<Producto> lista = productoDAO.buscar(filtro);
+            List<Producto> lista = productoDAO.buscar(texto);
+            System.out.println(lista.size());
             vista.cargarTabla(lista);
+
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(vista,
                     "Error al buscar productos: " + ex.getMessage());
         }
     }
 
-    // ===============================================================
-    //                        TABLA
-    // ===============================================================
-
     private void cargarTablaProductos() {
         try {
-            List<Producto> lista = productoDAO.listar();
+            List<Producto> lista = productoDAO.listarTodos();
             vista.cargarTabla(lista);
-
-            // alertas de stock bajo
-            for (Producto p : lista) {
-                if (p.getCantidadDisponible() <= 5) {
-                    JOptionPane.showMessageDialog(vista,
-                            "El producto " + p.getNombre() + " está casi agotado",
-                            "Alerta",
-                            JOptionPane.WARNING_MESSAGE);
-                }
-            }
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(vista,
@@ -217,17 +197,13 @@ public class ProductoController {
         }
     }
 
-    // ===============================================================
-    //                     LIMPIAR FORMULARIO
-    // ===============================================================
-
     private void limpiarFormulario() {
         vista.txtCodigo.setText("");
         vista.txtNombre.setText("");
         vista.txtPrecio.setText("");
         vista.txtCantidad.setText("");
 
-        vista.cmbCategoria.setSelectedIndex(0);
-        vista.cmbProveedor.setSelectedIndex(0);
+        if (vista.cmbCategoria.getItemCount() > 0) vista.cmbCategoria.setSelectedIndex(0);
+        if (vista.cmbProveedor.getItemCount() > 0) vista.cmbProveedor.setSelectedIndex(0);
     }
 }
