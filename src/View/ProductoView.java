@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author joans
+ * @author Cami
  */
 public class ProductoView extends javax.swing.JPanel {
 

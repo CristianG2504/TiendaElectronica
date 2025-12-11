@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  *
- * @author joans
+ * @author Paulo
  */
 public class UsuarioController {
 

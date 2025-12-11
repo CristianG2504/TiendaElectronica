@@ -12,7 +12,7 @@ import java.sql.*;
 
 /**
  *
- * @author joans
+ * @author Cris
  */
 public class VentaDaoImpl implements VentaDao {
 

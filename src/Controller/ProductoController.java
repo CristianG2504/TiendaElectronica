@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author joans
+ * @author Paulo
  */
 
 public class ProductoController {

@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author joans
+ * @author Cami
  */
 public class CategoriaView extends javax.swing.JPanel {
 

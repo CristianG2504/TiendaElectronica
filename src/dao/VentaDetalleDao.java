@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  *
- * @author joans
+ * @author Cris
  */
 public interface VentaDetalleDao {
         void insertarDetalles(int idVenta, List<VentaDetalle> detalles) throws Exception;

@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @author joans
+ * @author Cris
  */
 public interface VentaCompletaDao {
      List<VentaCompletaDTO> listarVentas() throws Exception;

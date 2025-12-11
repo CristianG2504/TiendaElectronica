@@ -12,7 +12,7 @@ import java.util.Optional;
 
 /**
  *
- * @author joans
+ * @author Cris
  */
 public interface ProveedorDao {
 

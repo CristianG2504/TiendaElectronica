@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  *
- * @author joans
+ * @author Cris
  */
 
 public interface CategoriaDao {

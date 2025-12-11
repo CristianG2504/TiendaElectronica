@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  *
- * @author joans
+ * @author Cami
  */
 public class CategoriaController {
 

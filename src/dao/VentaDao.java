@@ -8,7 +8,7 @@ import Model.Venta;
 
 /**
  *
- * @author joans
+ * @author Cris
  */
 public interface VentaDao {
      int crearVenta(Venta venta) throws Exception;

@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author joans
+ * @author Cris
  */
 public class UsuarioView extends javax.swing.JPanel {
 

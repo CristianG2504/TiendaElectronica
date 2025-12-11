@@ -14,7 +14,7 @@ import java.util.Optional;
 
 /**
  *
- * @author joans
+ * @author Cris
  */
 public class ProveedorDaoImpl implements ProveedorDao {
 

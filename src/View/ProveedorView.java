@@ -15,7 +15,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author joans
+ * @author Cris
  */
 public class ProveedorView extends javax.swing.JPanel {
 

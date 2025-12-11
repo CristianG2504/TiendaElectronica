@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  *
- * @author joans
+ * @author Cris
  */
 public class CategoriaDaoImpl implements CategoriaDao {
 

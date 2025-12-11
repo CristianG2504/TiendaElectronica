@@ -6,7 +6,7 @@ package Model;
 
 /**
  *
- * @author joans
+ * @author Paulo
  */
 public class Categoria {
 

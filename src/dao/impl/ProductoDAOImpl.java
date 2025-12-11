@@ -200,7 +200,7 @@ public class ProductoDAOImpl implements ProductoDao {
 
             String v = "%" + valor + "%";
 
-            // Asignar el mismo valor a todos los LIKE
+        
             for (int i = 1; i <= 9; i++) {
                 ps.setString(i, v);
             }

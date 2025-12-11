@@ -26,7 +26,7 @@ import java.sql.SQLException;
 
 /**
  *
- * @author Paulo
+ * @author Cami
  */
 public class FrmPrincipal extends javax.swing.JFrame {
 
